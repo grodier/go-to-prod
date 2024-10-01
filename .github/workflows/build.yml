@@ -1,0 +1,26 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install go
+        uses: actions/setup-go@v4
+
+      - name: Go fmt
+        run: gofmt -s -w . && git diff --exit-code
+
+      - name: Go vet
+        run: go vet ./...
+
+      - name: Build
+        run: go build -o /dev/null/ ./...
